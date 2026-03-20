@@ -13,6 +13,7 @@ ENV/
 .env
 .env.*
 !.env.example
+upalod/
 
 # Tooling caches
 .pytest_cache/
@@ -41,3 +42,6 @@ pip-wheel-metadata/
 # OS files
 .DS_Store
 Thumbs.db
+
+#files
+uploads/
