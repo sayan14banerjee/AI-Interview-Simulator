@@ -22,10 +22,13 @@ def upload_resume(
     user = Depends(get_current_user)
 ):
 
-    resume, text = save_resume(db, user.id, file.file, file.filename)
+    resume, data = save_resume(db, user.id, file.file, file.filename)
 
     return {
-        "message": "Resume uploaded",
+        "message": "Resume processed successfully",
         "resume_id": resume.id,
-        "preview": text[:300]
+        "skills": data.get("skills"),
+        "experience": data.get("experience_years"),
+        "summary": data.get("summary"),
+        "file" : resume.file_url
     }

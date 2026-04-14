@@ -8,5 +8,5 @@ class Resume(Base):
     user_id= Column(Integer, ForeignKey("users.id"))
     file_url = Column(String(255))
     extracted_skills = Column(JSON)
-    experience_year = Column(Integer)
+    experience_years = Column("experience_year", Integer)
     parsed_summary = Column(Text)

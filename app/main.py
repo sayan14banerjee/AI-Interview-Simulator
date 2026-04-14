@@ -1,15 +1,18 @@
 from fastapi import FastAPI
-from app.models import user, resume
+from app.models import user, resume, refresh_token
 from app.database import engine
 
 user.Base.metadata.create_all(bind=engine)
 resume.Base.metadata.create_all(bind=engine)
+refresh_token.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(  
     title="AI Interview Simulator",
     description="An AI-powered interview simulator that helps users practice and improve their interview skills.",
     version="1.0.0"
 )
+
+main = app
 
 @app.get("/")
 def read_root():
