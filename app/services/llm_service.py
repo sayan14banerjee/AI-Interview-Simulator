@@ -1,8 +1,6 @@
 import json
-
 from fastapi import HTTPException
 from openai import OpenAI, OpenAIError, RateLimitError
-
 from app.config import OPENAI_API_KEY, GROQ_API_KEY
 
 client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
@@ -79,3 +77,67 @@ def extract_resume_data(resume_text: str):
         }
     # print("Final extracted data:", parsed)  # Print the final extracted data for debugging
     return parsed
+
+
+def generate_interview_questions(skills, role, difficulty, question_count=5):
+
+    prompt = f"""
+    Generate {question_count} interview questions.
+
+    Candidate skills: {skills}
+    Role: {role}
+    Difficulty: {difficulty}
+
+    Return JSON list only, with this format:
+    [
+      {{
+        "question": "...",
+        "topic": "...",
+        "difficulty": "..."
+      }}
+    ]
+    """
+
+    if groq_client:
+        try:
+            response = groq_client.chat.completions.create(
+                model="openai/gpt-oss-120b",
+                messages=[
+                    {"role": "system", "content": "You are an expert interviewer."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.7
+            )
+            result = response.choices[0].message.content
+        except RateLimitError:
+            raise HTTPException(
+                status_code=503,
+                detail="GROQ quota exceeded. Check your API plan/billing."
+            )
+        except OpenAIError as exc:
+            raise HTTPException(status_code=502, detail=f"GROQ API request failed: {exc}")
+    elif client:
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are an expert interviewer."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.7
+            )
+            result = response.choices[0].message.content
+        except RateLimitError:
+            raise HTTPException(
+                status_code=503,
+                detail="OpenAI quota exceeded. Check your API plan/billing."
+            )
+        except OpenAIError as exc:
+            raise HTTPException(status_code=502, detail=f"OpenAI request failed: {exc}")
+    else:
+        raise HTTPException(status_code=500, detail="No OpenAI or GROQ API key configured.")
+
+    try:
+        return json.loads(result)
+    except ValueError:
+        return []

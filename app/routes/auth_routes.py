@@ -7,7 +7,7 @@ from app.services.auth_service import register_user, login_user, refresh_access_
 from app.utils.dependencies import get_current_user
 from app.utils.roles import require_role
 
-router = APIRouter()
+router = APIRouter(tags=["auth"])
 
 
 def get_db():

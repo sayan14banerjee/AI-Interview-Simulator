@@ -4,7 +4,7 @@ from app.database import SessionLocal
 from app.services.resume_service import save_resume
 from app.utils.dependencies import get_current_user
 
-router = APIRouter()
+router = APIRouter(tags=["resume"])
 
 
 def get_db():
