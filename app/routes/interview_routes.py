@@ -5,7 +5,7 @@ from app.models.resume import Resume
 from app.models.interview import InterviewSession
 from app.services.interview_service import create_interview, generate_questions_for_session
 from app.utils.dependencies import get_current_user, get_db
-from app.schemas.interview_schema import InterviewCreate
+from app.schemas.interview_schema import InterviewCreate, QuestionGenarate
 
 router = APIRouter(tags=["interview"])
 
@@ -29,13 +29,13 @@ def create_interview_api(
 
 @router.post("/{session_id}/generate-questions")
 def generate_questions_api(
-    session_id: int,
+    data: QuestionGenarate,
     db: Session = Depends(get_db),
     user = Depends(get_current_user)
 ):
 
     session = db.query(InterviewSession).filter(
-        InterviewSession.id == session_id
+        InterviewSession.id == data.session_id
     ).first()
 
     resume = db.query(Resume).filter(

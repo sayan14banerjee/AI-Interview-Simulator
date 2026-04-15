@@ -24,7 +24,8 @@ def generate_questions_for_session(db: Session, session, skills):
     questions = generate_interview_questions(
         skills=skills,
         role=session.role_selected,
-        difficulty=session.difficulty
+        difficulty=session.difficulty,
+        interview_type=session.interview_type
     )
 
     for q in questions:

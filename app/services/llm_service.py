@@ -78,25 +78,65 @@ def extract_resume_data(resume_text: str):
     # print("Final extracted data:", parsed)  # Print the final extracted data for debugging
     return parsed
 
+def safe_parse_json(text):
 
-def generate_interview_questions(skills, role, difficulty, question_count=5):
+    try:
+        return json.loads(text)
+    except:
+        # 🔥 Try to extract JSON manually
+        start = text.find("[")
+        end = text.rfind("]") + 1
+
+        if start != -1 and end != -1:
+            try:
+                return json.loads(text[start:end])
+            except:
+                pass
+
+    return []
+
+def generate_interview_questions(skills, role, difficulty, interview_type, question_count=5):
 
     prompt = f"""
-    Generate {question_count} interview questions.
+        Generate {question_count} UNIQUE and NON-REPETITIVE interview questions.
 
-    Candidate skills: {skills}
-    Role: {role}
-    Difficulty: {difficulty}
+        Candidate Details:
+        - Skills: {skills}
+        - Role: {role}
+        - Difficulty: {difficulty}
+        - Interview Type: {interview_type}
 
-    Return JSON list only, with this format:
-    [
-      {{
-        "question": "...",
-        "topic": "...",
-        "difficulty": "..."
-      }}
-    ]
-    """
+        STRICT INSTRUCTIONS:
+        - Questions MUST be different from each other
+        - Avoid generic or repeated questions
+        - Focus on practical and role-specific scenarios
+        - Difficulty MUST strictly match: {difficulty}
+        - Interview type MUST influence style:
+            - technical → coding, concepts, problem-solving
+            - HR → behavioral, communication
+            - system design → architecture, scalability
+            - mixed → combination of all
+
+        - If skills are provided, prioritize them in questions
+        - Do NOT repeat common questions like:
+        "Tell me about yourself" or "Explain OOP"
+
+        OUTPUT FORMAT:
+        Return ONLY valid JSON array:
+
+        [
+        {{
+            "question": "...",
+            "topic": "...",
+            "difficulty": "{difficulty}"
+        }}
+        ]
+
+        IMPORTANT:
+        - No explanation
+        - No extra text
+        - No duplicate questions
+        """
 
     if groq_client:
         try:
@@ -138,6 +178,22 @@ def generate_interview_questions(skills, role, difficulty, question_count=5):
         raise HTTPException(status_code=500, detail="No OpenAI or GROQ API key configured.")
 
     try:
-        return json.loads(result)
+        questions = safe_parse_json(result)
+
+        valid_questions = []
+
+        for q in questions:
+            if "question" in q:
+                valid_questions.append(q)
+
+        if not questions:
+            questions = [
+                {
+                    "question": "Explain your recent project.",
+                    "topic": "General",
+                    "difficulty": "easy"
+                }
+            ]
+        return valid_questions
     except ValueError:
         return []
