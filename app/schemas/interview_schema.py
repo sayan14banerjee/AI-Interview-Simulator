@@ -7,3 +7,8 @@ class InterviewCreate(BaseModel):
 
 class QuestionGenarate(BaseModel):
     session_id: int
+
+class SubmitAnswer(BaseModel):
+    question_id: int
+    answer: str
+    response_time: int

@@ -197,3 +197,74 @@ def generate_interview_questions(skills, role, difficulty, interview_type, quest
         return valid_questions
     except ValueError:
         return []
+    
+def evaluate_answer(question, answer):
+
+    prompt = f"""
+    Evaluate the candidate's answer.
+
+    Question:
+    {question}
+
+    Answer:
+    {answer}
+
+    Return STRICT JSON:
+
+    {{
+      "technical_score": 0-10,
+      "depth_score": 0-10,
+      "clarity_score": 0-10,
+      "completeness_score": 0-10,
+      "missing_concepts": ["..."],
+      "improvement_suggestions": ["..."],
+      "confidence_score": 0-1
+    }}
+
+    Rules:
+    - Be strict but fair
+    - Penalize vague answers
+    - Reward clarity and depth
+    - No explanation, only JSON
+    """
+
+    if groq_client:
+        try:
+            response = groq_client.chat.completions.create(
+                model="openai/gpt-oss-120b",
+                messages=[
+                    {"role": "system", "content": "You are a strict technical interviewer."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0
+            )
+        except RateLimitError:
+            raise HTTPException(
+                status_code=503,
+                detail="GROQ quota exceeded. Check your API plan/billing."
+            )
+        except OpenAIError as exc:
+            raise HTTPException(status_code=502, detail=f"GROQ API request failed: {exc}")
+    elif client:
+        try:
+            response = client.chat.completions.create(
+                model="openai/gpt-oss-120b",
+                messages=[
+                    {"role": "system", "content": "You are a strict technical interviewer."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0
+            )
+        except RateLimitError:
+            raise HTTPException(
+                status_code=503,
+                detail="OpenAI quota exceeded. Check your API plan/billing."
+            )
+        except OpenAIError as exc:
+            raise HTTPException(status_code=502, detail=f"OpenAI API request failed: {exc}")
+    else:
+        raise HTTPException(status_code=500, detail="No LLM client available")
+
+    result = response.choices[0].message.content
+
+    return safe_parse_json(result)

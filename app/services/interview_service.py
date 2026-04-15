@@ -28,6 +28,7 @@ def generate_questions_for_session(db: Session, session, skills):
         interview_type=session.interview_type
     )
 
+    generated_questions = []
     for q in questions:
         question = Question(
             session_id=session.id,
@@ -36,7 +37,14 @@ def generate_questions_for_session(db: Session, session, skills):
             difficulty_score=q.get("difficulty")
         )
         db.add(question)
+        db.flush()  # Flush to assign ID
+        generated_questions.append({
+            "id": question.id,
+            "question": q.get("question"),
+            "topic": q.get("topic"),
+            "difficulty": q.get("difficulty")
+        })
 
     db.commit()
 
-    return questions
+    return generated_questions

@@ -6,6 +6,8 @@ from app.models.interview import InterviewSession
 from app.services.interview_service import create_interview, generate_questions_for_session
 from app.utils.dependencies import get_current_user, get_db
 from app.schemas.interview_schema import InterviewCreate, QuestionGenarate
+from app.services.evaluation_service import process_answer
+from app.schemas.interview_schema import SubmitAnswer
 
 router = APIRouter(tags=["interview"])
 
@@ -29,6 +31,7 @@ def create_interview_api(
 
 @router.post("/{session_id}/generate-questions")
 def generate_questions_api(
+
     data: QuestionGenarate,
     db: Session = Depends(get_db),
     user = Depends(get_current_user)
@@ -49,3 +52,24 @@ def generate_questions_api(
     )
 
     return {"questions": questions}
+
+@router.post("/{question_id}/submit-answer")
+def submit_answer(
+    data: SubmitAnswer,
+    db: Session = Depends(get_db),
+    user = Depends(get_current_user)
+):
+
+    evaluation = process_answer(
+        db,
+        data.question_id,
+        data.answer,
+        data.response_time
+    )
+
+    return {
+        "final_score": evaluation.final_score,
+        "feedback": evaluation.improvement_suggestions
+    }
+
+

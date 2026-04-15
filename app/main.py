@@ -1,12 +1,14 @@
 from fastapi import FastAPI
-from app.models import user, resume, refresh_token
+from app.models import user, resume, refresh_token, interview, answer, evaluation
 from app.database import Base, engine
-from app.models import interview
+
 
 user.Base.metadata.create_all(bind=engine)
 resume.Base.metadata.create_all(bind=engine)
 refresh_token.Base.metadata.create_all(bind=engine)
 interview.Base.metadata.create_all(bind=engine)
+answer.Base.metadata.create_all(bind=engine)
+evaluation.Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI(  
