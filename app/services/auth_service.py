@@ -55,7 +55,7 @@ def login_user(db, email, password):
     db.add(token_entry)
     db.commit()
 
-    return access_token, refresh_token
+    return access_token, refresh_token, user.name, user.role
 
 
 def refresh_access_token(db: Session, refresh_token: str):

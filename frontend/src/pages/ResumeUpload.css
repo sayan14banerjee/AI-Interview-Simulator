@@ -1,0 +1,262 @@
+.resume-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.resume-header {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.back-btn {
+  background: #e0e0e0;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #d0d0d0;
+}
+
+.resume-header h1 {
+  color: #667eea;
+  margin: 0;
+  font-size: 28px;
+}
+
+.resume-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+.upload-card {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.upload-card h2 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+.upload-info {
+  color: #666;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.error-message {
+  background: #fee;
+  color: #c33;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border-left: 4px solid #c33;
+}
+
+.success-message {
+  background: #efe;
+  color: #3c3;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border-left: 4px solid #3c3;
+}
+
+.file-input-wrapper {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+#file-input {
+  display: none;
+}
+
+.file-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 30px;
+  border: 2px dashed #667eea;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f9f9f9;
+}
+
+.file-label:hover {
+  background: #f0f0f0;
+  border-color: #5568d3;
+}
+
+.file-icon {
+  font-size: 32px;
+}
+
+.file-text {
+  color: #667eea;
+  font-weight: 600;
+  text-align: center;
+}
+
+.file-info {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+.upload-card .btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upload-card .btn-primary:hover:not(:disabled) {
+  background: #5568d3;
+}
+
+.upload-card .btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.upload-success {
+  background: #f0f8ff;
+  border: 1px solid #667eea;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 25px;
+}
+
+.upload-success h3 {
+  color: #667eea;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.resume-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.detail-item {
+  padding: 15px;
+  background: white;
+  border-radius: 4px;
+  border-left: 4px solid #667eea;
+}
+
+.detail-item h4 {
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.detail-item p {
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-badge {
+  display: inline-block;
+  background: #667eea;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.info-card {
+  background: white;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.info-card h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.info-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.info-card li {
+  padding: 12px 0;
+  color: #666;
+  border-bottom: 1px solid #f0f0f0;
+  position: relative;
+  padding-left: 25px;
+}
+
+.info-card li:last-child {
+  border-bottom: none;
+}
+
+.info-card li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #66bb6a;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .resume-content {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .upload-card {
+    padding: 20px;
+  }
+
+  .file-label {
+    flex-direction: column;
+    padding: 20px;
+  }
+}

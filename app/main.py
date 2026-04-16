@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.models import user, resume, refresh_token, interview, answer, evaluation
 from app.database import Base, engine
 
@@ -15,6 +16,20 @@ app = FastAPI(
     title="AI Interview Simulator",
     description="An AI-powered interview simulator that helps users practice and improve their interview skills.",
     version="1.0.0"
+)
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:8000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 main = app

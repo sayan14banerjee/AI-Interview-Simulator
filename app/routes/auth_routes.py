@@ -34,12 +34,14 @@ def register(user: UserRegister, db: Session = Depends(get_db)):
 @router.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
 
-    access_token, refresh_token = login_user(db, user.email, user.password)
+    access_token, refresh_token, name, role = login_user(db, user.email, user.password)
 
     return {
         "access_token": access_token,
         "refresh_token": refresh_token,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "name": name,
+        "role": role
     }
 
 
