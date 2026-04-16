@@ -35,3 +35,7 @@ app.include_router(resume_routes.router, prefix="/resume")
 from app.routes import interview_routes
 
 app.include_router(interview_routes.router, prefix="/interview")
+
+from app.routes import user_routes
+
+app.include_router(user_routes.router, prefix="/users")
