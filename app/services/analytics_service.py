@@ -2,6 +2,8 @@ from sqlalchemy.orm import Session
 from app.models.evaluation import Evaluation
 from app.models.answer import Answer
 from app.models.interview import Question
+from collections import Counter
+from app.services.llm_service import generate_summary 
 
 def generate_report(db: Session, session_id: int):
 
@@ -31,12 +33,23 @@ def generate_report(db: Session, session_id: int):
     weak_areas = list(set(all_missing))
 
     # 🔥 Strong areas (reverse logic)
-    strong_areas = ["Core Concepts"] if avg_score > 7 else []
+    topic_counter = Counter(all_missing)
 
-    return {
+    weak_areas = [topic for topic, count in topic_counter.items() if count > 1]
+
+    strong_areas = ["Problem Solving", "Concept Clarity"] if avg_score > 7 else []
+
+    report = {
         "overall_score": avg_score,
         "weak_areas": weak_areas,
         "strong_areas": strong_areas,
         "improvement_plan": list(set(all_suggestions)),
         "confidence": round(sum([e.confidence for e in evaluations]) / len(evaluations), 2)
+    }
+    summary = generate_summary(report)
+    # print("Generated Summary:", summary)
+
+    return {
+        "report": report,
+        "summary": summary
     }
