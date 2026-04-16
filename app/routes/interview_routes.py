@@ -5,9 +5,10 @@ from app.models.resume import Resume
 from app.models.interview import InterviewSession
 from app.services.interview_service import create_interview, generate_questions_for_session
 from app.utils.dependencies import get_current_user, get_db
-from app.schemas.interview_schema import InterviewCreate, QuestionGenarate
+from app.schemas.interview_schema import InterviewCreate, QuestionGenarate, SubmitAnswer
 from app.services.evaluation_service import process_answer
-from app.schemas.interview_schema import SubmitAnswer
+from app.services.analytics_service import generate_report
+
 
 router = APIRouter(tags=["interview"])
 
@@ -73,3 +74,12 @@ def submit_answer(
     }
 
 
+@router.get("/{session_id}/report")
+def get_report(
+    session_id: int,
+    db: Session = Depends(get_db),
+    user = Depends(get_current_user)
+):
+    report = generate_report(db, session_id)
+
+    return report
