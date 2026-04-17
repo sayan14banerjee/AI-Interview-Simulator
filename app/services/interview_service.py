@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.interview import InterviewSession, Question
 from app.services.llm_service import generate_interview_questions
+from app.services.rag_service import retrieve_context
 
 
 def create_interview(db: Session, user_id, role, difficulty, interview_type):
@@ -19,12 +20,22 @@ def create_interview(db: Session, user_id, role, difficulty, interview_type):
     return session
 
 
-def generate_questions_for_session(db: Session, session, skills):
+def generate_questions_for_session(db: Session, session, skills, user_id):
+
+    
+    # 🔥 Retrieve context from RAG
+    context_chunks = retrieve_context(
+        query=f"{session.role_selected} {session.difficulty}",
+        user_id=user_id
+    )
+
+    context_text = "\n".join(context_chunks)
 
     questions = generate_interview_questions(
         skills=skills,
         role=session.role_selected,
         difficulty=session.difficulty,
+        context=context_text,
         interview_type=session.interview_type
     )
 

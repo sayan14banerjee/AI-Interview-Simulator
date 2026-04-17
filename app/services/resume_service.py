@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.models.resume import Resume
 from app.utils.upload_s3 import upload_file_to_s3
 from app.services.llm_service import extract_resume_data
+from app.services.rag_service import create_embeddings
 
 
 UPLOAD_FOLDER = "uploads/resumes"
@@ -22,6 +23,17 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 #     return file_path
 
+
+def split_text(text, chunk_size=200):
+
+    words = text.split()
+    chunks = []
+
+    for i in range(0, len(words), chunk_size):
+        chunk = " ".join(words[i:i + chunk_size])
+        chunks.append(chunk)
+
+    return chunks
 
 def extract_text_from_pdf(file):
     pdf_reader = PyPDF2.PdfReader(file)
@@ -44,6 +56,10 @@ def save_resume(db: Session, user_id: int, file, filename: str):
     # Use fresh in-memory streams so upload/parsing do not mutate the same handle.
     file_url = upload_file_to_s3(BytesIO(file_bytes), filename)
     text = extract_text_from_pdf(BytesIO(file_bytes))
+
+    # save text chunks for RAG
+    text_chunks = split_text(text)
+    create_embeddings(text_chunks, user_id)
 
     # LLM extraction
     extracted_data = extract_resume_data(text)  # type: ignore

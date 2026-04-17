@@ -1,4 +1,5 @@
 import json
+from multiprocessing import context
 from fastapi import HTTPException
 from openai import OpenAI, OpenAIError, RateLimitError
 from app.config import OPENAI_API_KEY, GROQ_API_KEY
@@ -95,18 +96,21 @@ def safe_parse_json(text):
 
     return []
 
-def generate_interview_questions(skills, role, difficulty, interview_type, question_count=5):
+def generate_interview_questions(skills, role, difficulty, context, interview_type, question_count=5):
 
     prompt = f"""
         Generate {question_count} UNIQUE and NON-REPETITIVE interview questions.
 
         Candidate Details:
+        -Candidate Context:{context}
         - Skills: {skills}
         - Role: {role}
         - Difficulty: {difficulty}
         - Interview Type: {interview_type}
 
         STRICT INSTRUCTIONS:
+        - Use the candidate context heavily
+        - Ask questions based on projects and experience
         - Questions MUST be different from each other
         - Avoid generic or repeated questions
         - Focus on practical and role-specific scenarios
@@ -123,6 +127,10 @@ def generate_interview_questions(skills, role, difficulty, interview_type, quest
 
         OUTPUT FORMAT:
         Return ONLY valid JSON array:
+
+        - Do not generate harmful or irrelevant content
+        - Stick strictly to interview domain
+        - Output must follow schema
 
         [
         {{

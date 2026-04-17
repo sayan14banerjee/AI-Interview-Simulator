@@ -49,7 +49,8 @@ def generate_questions_api(
     questions = generate_questions_for_session(
         db,
         session,
-        resume.extracted_skills
+        resume.extracted_skills,
+        user.id
     )
 
     return {"questions": questions}
