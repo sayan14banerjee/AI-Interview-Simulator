@@ -17,6 +17,91 @@ An AI-powered online interview simulator that helps candidates practice and impr
 - 📈 **Analytics**: Track user performance and interview statistics
 - 🔐 **Role-Based Access**: Secure admin panel with role verification
 
+
+## 🏗️ System Architecture
+
+### 🔄 High-Level Flow
+
+Client → FastAPI → Services → LLM → Database  
+↓  
+FAISS (RAG)
+
+### 🧩 Core Modules
+
+- 🔐 Authentication Module (JWT + Refresh Tokens + RBAC)
+- 📄 Resume Processing and AI Extraction
+- 🔎 RAG-based Context Retrieval (FAISS)
+- 🤖 Interview Question Generation Engine
+- 📝 Answer Evaluation Engine (LLM-based)
+- 📊 Custom Scoring Engine
+- 📈 Analytics and Reporting Module
+- 👥 Admin and User Management APIs
+
+
+
+### 🔄 System Flow
+
+1. User uploads resume  
+2. Resume is parsed and converted into embeddings  
+3. Embeddings stored in FAISS (vector database)  
+4. User creates interview session  
+5. Relevant context retrieved using RAG  
+6. LLM generates personalized questions  
+7. User submits answers  
+8. LLM evaluates answers  
+9. Custom scoring engine computes final score  
+10. Analytics module generates report  
+
+---
+
+### 🧠 AI Components
+
+#### 🔹 RAG (Retrieval-Augmented Generation)
+- Resume text → chunked → embedded
+- Stored in FAISS vector database
+- Retrieved context used in question generation
+
+👉 Enables **context-aware and personalized interviews**
+
+---
+
+#### 🔹 LLM Usage
+- Question Generation
+- Answer Evaluation
+- Feedback Generation
+
+---
+
+#### 🔹 Evaluation Metrics
+- Technical Accuracy
+- Depth of Knowledge
+- Clarity
+- Completeness
+- Confidence Score
+
+---
+
+### 🔐 Authentication & Security
+
+- JWT-based authentication
+- Access & Refresh token system
+- Role-Based Access Control (RBAC)
+- Password hashing (bcrypt)
+- Secure API middleware validation
+
+---
+
+### 📊 Analytics & Reporting
+
+- Overall score calculation
+- Weak area detection
+- Strong area identification
+- Improvement roadmap
+- Interview session tracking
+
+---
+
+
 ## 📋 Tech Stack
 
 ### Backend
@@ -367,6 +452,20 @@ For issues and support:
 - [ ] Interview scheduling and reminders
 
 ---
+
+
+## 🎯 Conclusion
+
+This project demonstrates strong capabilities in:
+
+- Backend Engineering
+- AI System Design
+- LLM Integration
+- Scalable Architecture
+
+---
+
+## ⭐ If you like this project, consider giving it a star!
 
 **Happy Interviewing! 🎉**
 
