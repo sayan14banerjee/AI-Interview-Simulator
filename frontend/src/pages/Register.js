@@ -8,10 +8,10 @@ function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('candidate');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const role = 'candidate';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,9 +40,9 @@ function Register() {
       <div className="auth-card">
         <h1>AI Interview Simulator</h1>
         <h2>Register</h2>
-        
+
         {error && <div className="error-message">{error}</div>}
-        
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Full Name</label>
@@ -54,7 +54,7 @@ function Register() {
               placeholder="Enter your full name"
             />
           </div>
-          
+
           <div className="form-group">
             <label>Email</label>
             <input
@@ -65,7 +65,7 @@ function Register() {
               placeholder="Enter your email"
             />
           </div>
-          
+
           <div className="form-group">
             <label>Password</label>
             <input
@@ -76,7 +76,7 @@ function Register() {
               placeholder="Enter your password"
             />
           </div>
-          
+
           <div className="form-group">
             <label>Confirm Password</label>
             <input
@@ -87,20 +87,12 @@ function Register() {
               placeholder="Confirm your password"
             />
           </div>
-          
-          <div className="form-group">
-            <label>Role</label>
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="candidate">Candidate</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-          
+
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
-        
+
         <div className="auth-footer">
           <p>Already have an account? <Link to="/login">Login here</Link></p>
         </div>

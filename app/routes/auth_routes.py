@@ -26,7 +26,6 @@ def register(user: UserRegister, db: Session = Depends(get_db)):
         name=user.name,
         email=user.email,
         password=user.password,
-        role=user.role
     )
 
     return {"message": "User registered", "email": new_user.email, "role": new_user.role}
